@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'round_icon.dart';
 
 class TipsCalculator extends StatefulWidget {
   TipsCalculator({this.title});
@@ -15,14 +13,17 @@ class TipsCalculator extends StatefulWidget {
 
 class _TipsCalculatorState extends State<TipsCalculator> {
   final double tipPerPerson = 0.0;
-  final double tip = 0.0;
-  final double billAmount = 500.0;
+  int tip = 0;
+  double billAmount = 500.0;
   final int splitValue = 0;
-  double _sliderValue = 1.0;
+  double _sliderValue = 15.0;
+  final myController = TextEditingController();
 
   void _refreshSlider(double newValue) {
     setState(() {
+      billAmount = double.parse(myController.text);
       _sliderValue = newValue;
+      tip = (billAmount * (newValue / 100.0)).round();
     });
   }
 
@@ -47,7 +48,10 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                   padding: EdgeInsets.all(20.0),
                   margin: EdgeInsets.only(top: 20.0, left: 40.0, right: 40.0),
                   child: Column(
-                    children: [Text('Total Per Person'), Text('\$ $tipPerPerson')],
+                    children: [
+                      Text('Total Per Person'),
+                      Text('\$ $tipPerPerson')
+                    ],
                   ),
                 ),
               ),
@@ -70,43 +74,49 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Padding(
-                        padding: const EdgeInsets.only(left:50.0),
-                        child: Text('Split'),
-                      ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 50.0),
+                          child: Text('Split'),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SizedBox(width: 50.0,),
+                            SizedBox(
+                              width: 50.0,
+                            ),
                             FlatButton(
-                              color: Colors.blue,
-                              minWidth: 0,
-                              child:Text('+'),
+                                color: Colors.blue,
+                                minWidth: 0,
+                                child: Text('+'),
                                 onPressed: () {
-                                  setState(() {
-                                  });
+                                  setState(() {});
                                 }),
                           ],
                         ),
                         Text('$splitValue'),
                         FlatButton(
-                          color:Colors.blue,
-                          minWidth: 0,
-                            child:Text('-'),
+                            color: Colors.blue,
+                            minWidth: 0,
+                            child: Text('-'),
                             onPressed: () {
-                              setState(() {
-                              });
-                            }),],
-
+                              setState(() {});
+                            }),
+                      ],
                     ),
                     SizedBox(
                       height: 40.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Flexible(child: Text('Tip')),
-                        Center(child: Text(
-                            '\$ $tip',textAlign: TextAlign.center,))],
+                      children: [
+                        Flexible(child: Text('Tip')),
+                        Center(
+                            child: Text(
+                          '\$ $tip',
+                          textAlign: TextAlign.center,
+                        ))
+                      ],
                     ),
                     SizedBox(
                       height: 30.0,
@@ -119,9 +129,9 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                         overlayColor: Color(0x29EB1555),
                         valueIndicatorColor: Colors.blue,
                         thumbShape:
-                        RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                            RoundSliderThumbShape(enabledThumbRadius: 15.0),
                         overlayShape:
-                        RoundSliderOverlayShape(overlayRadius: 30.0),
+                            RoundSliderOverlayShape(overlayRadius: 30.0),
                       ),
                       child: Column(
                         children: [
@@ -130,7 +140,7 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                             value: _sliderValue,
                             onChanged: _refreshSlider,
                             min: 1.0,
-                            max: 10.0,
+                            max: 100.0,
                           ),
                         ],
                       ),
@@ -139,21 +149,20 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 20.0,left: 40.0,right: 40.0),
+                margin: EdgeInsets.only(top: 20.0, left: 40.0, right: 40.0),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.blue.shade300),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: TextField(
+                  controller: myController,
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Bill to Pay'
-                  ),
+                      border: InputBorder.none, hintText: 'Bill to Pay'),
                 ),
               )
             ],
