@@ -12,10 +12,10 @@ class TipsCalculator extends StatefulWidget {
 }
 
 class _TipsCalculatorState extends State<TipsCalculator> {
-  final double tipPerPerson = 0.0;
+   int tipPerPerson = 0;
   int tip = 0;
   double billAmount = 500.0;
-  final int splitValue = 0;
+  int splitValue = 0;
   double _sliderValue = 15.0;
   final myController = TextEditingController();
 
@@ -24,6 +24,7 @@ class _TipsCalculatorState extends State<TipsCalculator> {
       billAmount = double.parse(myController.text);
       _sliderValue = newValue;
       tip = (billAmount * (newValue / 100.0)).round();
+      tipPerPerson = (tip/splitValue).round();
     });
   }
 
@@ -90,7 +91,9 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                                 minWidth: 0,
                                 child: Text('+'),
                                 onPressed: () {
-                                  setState(() {});
+                                  setState(() {
+                                    splitValue++;
+                                  });
                                 }),
                           ],
                         ),
@@ -100,7 +103,9 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                             minWidth: 0,
                             child: Text('-'),
                             onPressed: () {
-                              setState(() {});
+                              setState(() {
+                                splitValue--;
+                              });
                             }),
                       ],
                     ),
@@ -113,9 +118,9 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                         Flexible(child: Text('Tip')),
                         Center(
                             child: Text(
-                          '\$ $tip',
-                          textAlign: TextAlign.center,
-                        ))
+                              '\$ $tip',
+                              textAlign: TextAlign.center,
+                            ))
                       ],
                     ),
                     SizedBox(
@@ -129,9 +134,9 @@ class _TipsCalculatorState extends State<TipsCalculator> {
                         overlayColor: Color(0x29EB1555),
                         valueIndicatorColor: Colors.blue,
                         thumbShape:
-                            RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                        RoundSliderThumbShape(enabledThumbRadius: 15.0),
                         overlayShape:
-                            RoundSliderOverlayShape(overlayRadius: 30.0),
+                        RoundSliderOverlayShape(overlayRadius: 30.0),
                       ),
                       child: Column(
                         children: [
